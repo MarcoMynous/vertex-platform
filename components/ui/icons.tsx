@@ -290,6 +290,26 @@ export function ChevronDownIcon({ size = 24, className = "", ...props }: IconPro
   );
 }
 
+export function ArrowRightIcon({ size = 20, className = "", ...props }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      {...props}
+    >
+      <line x1="5" y1="12" x2="19" y2="12" />
+      <polyline points="12 5 19 12 12 19" />
+    </svg>
+  );
+}
+
 export function ExternalLinkIcon({ size = 20, className = "", ...props }: IconProps) {
   return (
     <svg
@@ -308,6 +328,75 @@ export function ExternalLinkIcon({ size = 20, className = "", ...props }: IconPr
       <polyline points="15 3 21 3 21 9" />
       <line x1="10" y1="14" x2="21" y2="3" />
     </svg>
+  );
+}
+
+export function StarOutlineIcon({ size = 20, className = "", ...props }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      {...props}
+    >
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+    </svg>
+  );
+}
+
+export function DockerIcon({ size = 48, className = "" }: { size?: number; className?: string }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 48 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
+      <path
+        d="M45.5 24.5C44.3 20.8 40.5 19.8 38.3 20.2C36.8 17.9 33.7 17.2 31.5 17.6V20.5H28.5V17.5H25.5V20.5H22.5V17.5H19.5V20.5H16.5V23.5H13.5V20.5H10.5V23.5H7.5V26.5C7.5 32.5 12.5 36.5 20.5 36.5C29.5 36.5 38.5 34.5 41.5 27.5C43.5 27.8 45.8 26.8 45.5 24.5Z"
+        fill="#2496ED"
+      />
+      <rect x="19.5" y="17.5" width="2.5" height="2.5" fill="#E1F5FE" />
+      <rect x="22.5" y="17.5" width="2.5" height="2.5" fill="#E1F5FE" />
+      <rect x="25.5" y="17.5" width="2.5" height="2.5" fill="#E1F5FE" />
+      <rect x="13.5" y="20.5" width="2.5" height="2.5" fill="#E1F5FE" />
+      <rect x="16.5" y="20.5" width="2.5" height="2.5" fill="#E1F5FE" />
+      <rect x="19.5" y="20.5" width="2.5" height="2.5" fill="#E1F5FE" />
+      <rect x="22.5" y="20.5" width="2.5" height="2.5" fill="#E1F5FE" />
+      <rect x="25.5" y="20.5" width="2.5" height="2.5" fill="#E1F5FE" />
+      <rect x="28.5" y="20.5" width="2.5" height="2.5" fill="#E1F5FE" />
+      <circle cx="15.5" cy="27.5" r="1" fill="#0D47A1" />
+    </svg>
+  );
+}
+
+export function TypeScriptIcon({ size = 48, className = "" }: { size?: number; className?: string }) {
+  return (
+    <div
+      className={`rounded-[12px] bg-[#3178C6] text-white flex items-center justify-center font-bold font-mono shadow-xs select-none ${className}`}
+      style={{ width: size, height: size, fontSize: size * 0.42 }}
+    >
+      TS
+    </div>
+  );
+}
+
+export function NextJsIcon({ size = 48, className = "" }: { size?: number; className?: string }) {
+  return (
+    <div
+      className={`rounded-[12px] bg-neutral-900 text-white flex items-center justify-center font-bold font-mono shadow-xs select-none ${className}`}
+      style={{ width: size, height: size, fontSize: size * 0.46 }}
+    >
+      N
+    </div>
   );
 }
 
