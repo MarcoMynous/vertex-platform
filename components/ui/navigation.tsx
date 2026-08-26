@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { SignInButton, SignUpButton, Show, UserButton } from "@clerk/nextjs";
 import { BellIcon, VertexLogo } from "./icons";
 
 export interface NavItem {
@@ -24,10 +25,8 @@ export function Navigation({
     { label: "My Learning", href: "#", active: false },
   ],
   brandName = "Vertex",
-  userAvatarUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=120&auto=format&fit=crop",
   showUserControls = true,
   onNotificationsClick,
-  onAvatarClick,
   rightSlot,
   className = "",
   ...props
@@ -67,26 +66,41 @@ export function Navigation({
           rightSlot
         ) : showUserControls ? (
           <>
-            <button
-              onClick={onNotificationsClick}
-              className="w-9 h-9 flex items-center justify-center text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 rounded-full transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-400"
-              aria-label="Notifications"
-            >
-              <BellIcon size={20} />
-            </button>
+            <Show when="signed-out">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <SignInButton mode="modal">
+                  <button className="text-[14px] font-medium font-sans text-neutral-700 hover:text-neutral-900 px-3 py-1.5 transition-colors cursor-pointer rounded-lg hover:bg-neutral-100">
+                    Sign in
+                  </button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <button className="text-[14px] font-medium font-sans text-white bg-primary-500 hover:bg-primary-600 px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer shadow-2xs">
+                    Sign up
+                  </button>
+                </SignUpButton>
+              </div>
+            </Show>
 
-            <button
-              onClick={onAvatarClick}
-              className="relative w-9 h-9 rounded-full overflow-hidden border border-neutral-200 shadow-2xs hover:ring-2 hover:ring-primary-400 transition-all cursor-pointer focus:outline-none"
-              aria-label="User profile"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={userAvatarUrl}
-                alt="Learner avatar"
-                className="w-full h-full object-cover"
-              />
-            </button>
+            <Show when="signed-in">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={onNotificationsClick}
+                  className="w-9 h-9 flex items-center justify-center text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 rounded-full transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-400"
+                  aria-label="Notifications"
+                >
+                  <BellIcon size={20} />
+                </button>
+
+                <UserButton
+                  appearance={{
+                    elements: {
+                      avatarBox:
+                        "w-9 h-9 border border-neutral-200 shadow-2xs hover:ring-2 hover:ring-primary-400 transition-all",
+                    },
+                  }}
+                />
+              </div>
+            </Show>
           </>
         ) : null}
       </div>
