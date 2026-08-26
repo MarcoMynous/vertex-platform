@@ -45,13 +45,13 @@ export const courseType = defineType({
       type: "string",
       options: {
         list: [
-          { title: "Beginner", value: "Beginner" },
-          { title: "Intermediate", value: "Intermediate" },
-          { title: "Advanced", value: "Advanced" },
+          { title: "Beginner", value: "beginner" },
+          { title: "Intermediate", value: "intermediate" },
+          { title: "Advanced", value: "advanced" },
         ],
         layout: "radio",
       },
-      initialValue: "Beginner",
+      initialValue: "beginner",
       validation: (rule) => rule.required(),
     }),
     defineField({

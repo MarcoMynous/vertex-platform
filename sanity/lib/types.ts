@@ -40,8 +40,8 @@ export interface Instructor {
   name: string;
   slug: SanitySlug;
   photo: SanityImageSource;
-  expertise: string;
-  bio: string;
+  expertise: string[] | string;
+  bio: PortableTextBlock[] | string;
 }
 
 export interface LearningOutcome {
@@ -92,7 +92,7 @@ export interface CourseSummary {
   slug: SanitySlug;
   summary: string;
   coverImage: SanityImageSource;
-  level: "Beginner" | "Intermediate" | "Advanced";
+  level: "beginner" | "intermediate" | "advanced" | "Beginner" | "Intermediate" | "Advanced";
   price: number;
   popular?: boolean;
   studentCount?: number;
@@ -110,7 +110,7 @@ export interface Course {
   slug: SanitySlug;
   summary: string;
   coverImage: SanityImageSource;
-  level: "Beginner" | "Intermediate" | "Advanced";
+  level: "beginner" | "intermediate" | "advanced" | "Beginner" | "Intermediate" | "Advanced";
   price: number;
   popular?: boolean;
   studentCount?: number;
