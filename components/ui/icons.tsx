@@ -564,3 +564,106 @@ export function AccessibilityIcon({ size = 24, className = "", ...props }: IconP
     </svg>
   );
 }
+
+export function OutcomeIcon({
+  name,
+  size = 28,
+  className = "",
+  stroke = "#EA580C",
+  ...props
+}: IconProps & { name?: string; stroke?: string }) {
+  const iconProps = {
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke,
+    strokeWidth: "1.75",
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    className,
+    ...props,
+  };
+
+  switch (name?.toLowerCase()) {
+    case "layers":
+      return (
+        <svg {...iconProps}>
+          <path d="M12 2L2 7l10 5 10-5-10-5z" />
+          <path d="M2 17l10 5 10-5" />
+          <path d="M2 12l10 5 10-5" />
+        </svg>
+      );
+    case "gauge":
+    case "speedometer":
+    case "performance":
+      return (
+        <svg {...iconProps}>
+          <path d="M12 14v-4" />
+          <path d="M3.34 18a10 10 0 1 1 17.32 0" />
+          <path d="M4 14h2" />
+          <path d="M18 14h2" />
+          <path d="M6.34 8.34l1.42 1.42" />
+          <path d="M16.24 9.76l1.42-1.42" />
+        </svg>
+      );
+    case "database":
+    case "caching":
+    case "data":
+      return (
+        <svg {...iconProps}>
+          <ellipse cx="12" cy="5" rx="9" ry="3" />
+          <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+          <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+        </svg>
+      );
+    case "cloud":
+    case "deployment":
+    case "scaling":
+      return (
+        <svg {...iconProps}>
+          <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
+        </svg>
+      );
+    case "workflow":
+      return (
+        <svg {...iconProps}>
+          <rect x="3" y="3" width="6" height="6" rx="1.5" />
+          <rect x="15" y="15" width="6" height="6" rx="1.5" />
+          <path d="M9 6h6a3 3 0 0 1 3 3v6" />
+          <path d="M15 9l3-3 3 3" />
+        </svg>
+      );
+    case "rocket":
+      return (
+        <svg {...iconProps}>
+          <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+          <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+          <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+          <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+        </svg>
+      );
+    case "shield":
+    case "security":
+      return (
+        <svg {...iconProps}>
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <path d="M9 12l2 2 4-4" />
+        </svg>
+      );
+    case "puzzle":
+      return (
+        <svg {...iconProps}>
+          <path d="M19.439 7.85c-.049-.322.059-.648.289-.878l1.568-1.568a2.406 2.406 0 0 0-3.402-3.402l-1.568 1.568a.995.995 0 0 1-.878.29c-.495-.074-1.004-.074-1.498 0a.995.995 0 0 1-.878-.29L11.504 2.002a2.406 2.406 0 0 0-3.402 3.402l1.568 1.568c.23.23.338.556.29.878a10.89 10.89 0 0 0 0 1.498.995.995 0 0 1-.29.878L8.102 11.794a2.406 2.406 0 0 0 3.402 3.402l1.568-1.568c.23-.23.556-.338.878-.29.494.074 1.003.074 1.498 0 .322.048.648-.06.878-.29l1.568 1.568a2.406 2.406 0 0 0 3.402-3.402l-1.568-1.568a.995.995 0 0 1-.29-.878c.074-.495.074-1.004 0-1.498z" />
+        </svg>
+      );
+    case "code":
+    default:
+      return (
+        <svg {...iconProps}>
+          <polyline points="16 18 22 12 16 6" />
+          <polyline points="8 6 2 12 8 18" />
+        </svg>
+      );
+  }
+}

@@ -21,8 +21,8 @@ export interface NavigationProps extends React.HTMLAttributes<HTMLElement> {
 
 export function Navigation({
   items = [
-    { label: "Courses", href: "#", active: true },
-    { label: "My Learning", href: "#", active: false },
+    { label: "Courses", href: "/courses", active: true },
+    { label: "My Learning", href: "/my-learning", active: false },
   ],
   brandName = "Vertex",
   showUserControls = true,
