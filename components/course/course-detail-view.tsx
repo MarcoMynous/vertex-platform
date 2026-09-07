@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { CourseModulesAccordion } from "./course-modules-accordion";
 import { urlFor } from "@/sanity/lib/image";
 import type { Course } from "@/sanity/lib/types";
+import posthog from "posthog-js";
 
 export interface CourseDetailViewProps {
   course: Course;
@@ -50,6 +51,18 @@ function capitalizeLevel(level?: string): string {
 
 export function CourseDetailView({ course }: CourseDetailViewProps) {
   const [isBookmarked, setIsBookmarked] = useState(false);
+
+  // Track when the user views a course detail page (top of learning funnel)
+  useEffect(() => {
+    posthog.capture("course_detail_viewed", {
+      course_slug: course.slug.current,
+      course_title: course.title,
+      course_level: course.level,
+      course_category: course.category?.title,
+      modules_count: course.modules?.length ?? 0,
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [course.slug.current]);
 
   // Compute first lesson link for "Continue Learning" / "Start Course" CTA
   const firstModule = course.modules?.[0];
@@ -197,7 +210,17 @@ export function CourseDetailView({ course }: CourseDetailViewProps) {
 
             {/* Action Buttons */}
             <div className="mt-8 flex flex-wrap items-center gap-3.5">
-              <Link href={continueHref}>
+              <Link
+                href={continueHref}
+                onClick={() =>
+                  posthog.capture("continue_learning_clicked", {
+                    course_slug: course.slug.current,
+                    course_title: course.title,
+                    destination: continueHref,
+                    location: "hero",
+                  })
+                }
+              >
                 <Button
                   variant="primary"
                   size="lg"
@@ -211,7 +234,15 @@ export function CourseDetailView({ course }: CourseDetailViewProps) {
               <Button
                 variant="secondary"
                 size="lg"
-                onClick={() => setIsBookmarked((prev) => !prev)}
+                onClick={() => {
+                  const nextBookmarked = !isBookmarked;
+                  setIsBookmarked(nextBookmarked);
+                  posthog.capture("course_bookmarked", {
+                    course_slug: course.slug.current,
+                    course_title: course.title,
+                    bookmarked: nextBookmarked,
+                  });
+                }}
                 className={`h-[48px] px-5 rounded-[12px] bg-white border border-neutral-200 hover:border-neutral-300 text-neutral-800 font-medium text-[14px] shadow-2xs transition-all gap-2 ${
                   isBookmarked ? "border-primary-300 text-primary-600 bg-primary-50/40" : ""
                 }`}
@@ -319,7 +350,18 @@ export function CourseDetailView({ course }: CourseDetailViewProps) {
 
           {/* Right Action CTA */}
           <div className="shrink-0 w-full sm:w-auto">
-            <Link href={continueHref} className="block w-full sm:w-auto">
+            <Link
+              href={continueHref}
+              className="block w-full sm:w-auto"
+              onClick={() =>
+                posthog.capture("continue_learning_clicked", {
+                  course_slug: course.slug.current,
+                  course_title: course.title,
+                  destination: continueHref,
+                  location: "sticky_bar",
+                })
+              }
+            >
               <Button
                 variant="primary"
                 size="default"

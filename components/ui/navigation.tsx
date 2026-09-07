@@ -1,7 +1,10 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { SignInButton, SignUpButton, Show, UserButton } from "@clerk/nextjs";
 import { BellIcon, VertexLogo } from "./icons";
+import posthog from "posthog-js";
 
 export interface NavItem {
   label: string;
@@ -69,12 +72,18 @@ export function Navigation({
             <Show when="signed-out">
               <div className="flex items-center gap-2 sm:gap-3">
                 <SignInButton mode="modal">
-                  <button className="text-[14px] font-medium font-sans text-neutral-700 hover:text-neutral-900 px-3 py-1.5 transition-colors cursor-pointer rounded-lg hover:bg-neutral-100">
+                  <button
+                    className="text-[14px] font-medium font-sans text-neutral-700 hover:text-neutral-900 px-3 py-1.5 transition-colors cursor-pointer rounded-lg hover:bg-neutral-100"
+                    onClick={() => posthog.capture("sign_in_initiated")}
+                  >
                     Sign in
                   </button>
                 </SignInButton>
                 <SignUpButton mode="modal">
-                  <button className="text-[14px] font-medium font-sans text-white bg-primary-500 hover:bg-primary-600 px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer shadow-2xs">
+                  <button
+                    className="text-[14px] font-medium font-sans text-white bg-primary-500 hover:bg-primary-600 px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer shadow-2xs"
+                    onClick={() => posthog.capture("sign_up_initiated")}
+                  >
                     Sign up
                   </button>
                 </SignUpButton>

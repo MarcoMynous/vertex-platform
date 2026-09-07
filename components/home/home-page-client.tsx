@@ -15,6 +15,7 @@ import { Navigation } from "@/components/ui/navigation";
 import { CourseCard } from "@/components/ui/course-card";
 import { Button } from "@/components/ui/button";
 import type { CourseSummary } from "@/sanity/lib/types";
+import posthog from "posthog-js";
 
 export interface HomePageClientProps {
   courses: CourseSummary[];
@@ -115,6 +116,9 @@ export function HomePageClient({ courses }: HomePageClientProps) {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
+      posthog.capture("home_search_submitted", {
+        query_length: searchQuery.trim().length,
+      });
       // In future search task this routes to search page
       console.log("Searching for:", searchQuery);
     }
@@ -173,6 +177,7 @@ export function HomePageClient({ courses }: HomePageClientProps) {
               className="h-[48px] px-7 rounded-[12px] bg-[#F97316] hover:bg-[#EA580C] text-white shadow-sm hover:shadow-md transition-all font-medium text-[15px] gap-2"
               rightIcon={<ArrowRightIcon size={18} />}
               onClick={() => {
+                posthog.capture("hero_cta_clicked");
                 document.getElementById("courses")?.scrollIntoView({ behavior: "smooth" });
               }}
             >

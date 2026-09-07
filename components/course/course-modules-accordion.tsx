@@ -7,6 +7,7 @@ import {
   PlayCircleIcon,
 } from "@/components/ui/icons";
 import type { Module, LessonSummary } from "@/sanity/lib/types";
+import posthog from "posthog-js";
 
 export interface CourseModulesAccordionProps {
   modules: Module<LessonSummary>[];
@@ -57,14 +58,21 @@ export function CourseModulesAccordion({
       ? modules.slice(0, initialVisibleCount)
       : modules;
 
-  const toggleModule = (index: number) => {
+  const toggleModule = (index: number, moduleTitle: string) => {
     setExpandedIndices((prev) => {
       const next = new Set(prev);
+      const willExpand = !next.has(index);
       if (next.has(index)) {
         next.delete(index);
       } else {
         next.add(index);
       }
+      posthog.capture("module_expanded", {
+        course_slug: courseSlug,
+        module_index: index + 1,
+        module_title: moduleTitle,
+        expanded: willExpand,
+      });
       return next;
     });
   };
@@ -88,7 +96,7 @@ export function CourseModulesAccordion({
             {/* Module Accordion Header */}
             <button
               type="button"
-              onClick={() => toggleModule(index)}
+              onClick={() => toggleModule(index, mod.title)}
               className="w-full flex items-center justify-between p-4 sm:p-5 text-left hover:bg-neutral-50/70 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/20"
               aria-expanded={isExpanded}
             >
@@ -141,6 +149,16 @@ export function CourseModulesAccordion({
                         key={lesson?._id || `lesson-${lIdx}`}
                         href={`/courses/${courseSlug}/lessons/${lessonSlug}`}
                         className="flex items-center justify-between px-5 py-3 sm:py-3.5 hover:bg-white transition-colors group text-decoration-none"
+                        onClick={() =>
+                          posthog.capture("lesson_clicked", {
+                            course_slug: courseSlug,
+                            lesson_slug: lessonSlug,
+                            lesson_title: lesson?.title,
+                            lesson_number: lessonNumber,
+                            module_index: moduleNumber,
+                            is_free_preview: lesson?.freePreview ?? false,
+                          })
+                        }
                       >
                         <div className="flex items-center gap-3 min-w-0 pr-4">
                           <PlayCircleIcon
@@ -182,7 +200,15 @@ export function CourseModulesAccordion({
         <div className="pt-2 flex justify-center">
           <button
             type="button"
-            onClick={() => setShowAllModules((prev) => !prev)}
+            onClick={() => {
+              const nextState = !showAllModules;
+              setShowAllModules(nextState);
+              posthog.capture("show_all_modules_toggled", {
+                course_slug: courseSlug,
+                total_modules: modules.length,
+                expanded: nextState,
+              });
+            }}
             className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-neutral-200 hover:border-neutral-300 rounded-[12px] text-[13px] font-sans font-medium text-neutral-700 shadow-2xs hover:shadow-xs transition-all"
           >
             <span>
