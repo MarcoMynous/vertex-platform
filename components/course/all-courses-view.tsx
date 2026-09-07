@@ -12,6 +12,7 @@ import {
 import { Navigation } from "@/components/ui/navigation";
 import { CourseCard } from "@/components/ui/course-card";
 import type { Category, CourseSummary } from "@/sanity/lib/types";
+import posthog from "posthog-js";
 
 export interface AllCoursesViewProps {
   courses: CourseSummary[];
@@ -105,6 +106,7 @@ function getCourseIcon(slug?: string): React.ReactNode {
 export function AllCoursesView({ courses, categories }: AllCoursesViewProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchDebounceTimer, setSearchDebounceTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
 
   // Build category list with course counts
   const categoryOptions = useMemo(() => {
@@ -204,7 +206,19 @@ export function AllCoursesView({ courses, categories }: AllCoursesViewProps) {
                   <input
                     type="text"
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setSearchQuery(value);
+                      if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+                      if (value.trim()) {
+                        const timer = setTimeout(() => {
+                          posthog.capture("course_searched", {
+                            query_length: value.trim().length,
+                          });
+                        }, 600);
+                        setSearchDebounceTimer(timer);
+                      }
+                    }}
                     placeholder="Search courses..."
                     className="w-full bg-transparent text-[14px] font-sans text-neutral-900 placeholder:text-neutral-400 focus:outline-none"
                   />
@@ -228,7 +242,14 @@ export function AllCoursesView({ courses, categories }: AllCoursesViewProps) {
                 return (
                   <button
                     key={cat.slug}
-                    onClick={() => setSelectedCategory(cat.slug)}
+                    onClick={() => {
+                      setSelectedCategory(cat.slug);
+                      posthog.capture("course_category_filtered", {
+                        category_slug: cat.slug,
+                        category_title: cat.title,
+                        results_count: cat.count,
+                      });
+                    }}
                     className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-[10px] text-[13px] font-medium font-sans whitespace-nowrap transition-all cursor-pointer ${
                       isActive
                         ? "bg-neutral-900 text-white shadow-xs"
